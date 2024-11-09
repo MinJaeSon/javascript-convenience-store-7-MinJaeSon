@@ -1,9 +1,9 @@
-import InitController from './Controller/InitController.js';
+import MainController from './Controller/MainController.js';
 
 class App {
   async run() {
-    const initController = new InitController();
-    await initController.run();
+    const mainController = new MainController();
+    await mainController.run();
   }
 }
 
