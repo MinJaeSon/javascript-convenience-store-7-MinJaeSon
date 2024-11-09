@@ -10,11 +10,19 @@ class OutputView {
     IOUtils.newLine();
   }
 
+  #printNoStockProduct(products, productName, productPrice, promotionName) {
+    const productTypeCount = products.filter((product) => product.name === productName).length;
+    if (productTypeCount === 1 && promotionName !== '' && promotionName !== undefined) {
+      IOUtils.output(`- ${productName} ${productPrice}원 재고 없음`);
+    }
+  }
+
   printCurrentProducts(products) {
     products.forEach((product) => {
       const promotionName = product.promotion?.name || '';
 
       IOUtils.output(`- ${product.name} ${product.price}원 ${product.quantity}개 ${promotionName}`);
+      this.#printNoStockProduct(products, product.name, product.price, product.promotion?.name);
     });
     IOUtils.newLine();
   }
