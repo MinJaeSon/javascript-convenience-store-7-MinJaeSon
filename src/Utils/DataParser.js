@@ -1,17 +1,24 @@
-import Product from '../Model/Product';
-import Promotion from '../Model/Promotion';
+import Product from '../Model/Product.js';
+import Promotion from '../Model/Promotion.js';
+import fs from 'fs';
 
 class DataParser {
   #parseCSV(filePath) {
     const data = fs.readFileSync(filePath, 'utf8');
-    const rows = data.split('\n');
-    const headers = rows[0].split(',');
+    const rows = data.trim().split('\n');
+    const headers = rows[0].trim().split(',');
 
-    return rows
-      .slice(1)
-      .map((row) =>
-        Object.fromEntries(row.split(',').map((value, index) => [headers[index], value])),
-      );
+    return rows.slice(1).map((row) =>
+      Object.fromEntries(
+        row.split(',').map((value, index) => {
+          if (value.trim() === 'null') {
+            return [headers[index], null];
+          }
+
+          return [headers[index], value.trim()];
+        }),
+      ),
+    );
   }
 
   #parsePromotions(promotionsFilePath) {
@@ -30,10 +37,12 @@ class DataParser {
   }
 
   #parseProducts(productsFilePath, promotions) {
-    const productsData = DataParser.parseCSV(productsFilePath);
+    const productsData = this.#parseCSV(productsFilePath);
 
     return productsData.map((product) => {
-      const promotion = promotions.find((promotion) => promotion.name === product.promotion);
+      const promotion = promotions.find(
+        (promotion) => product.promotion !== null && promotion.name === product.promotion,
+      );
 
       return new Product(product.name, Number(product.price), Number(product.quantity), promotion);
     });
