@@ -16,6 +16,7 @@ class OutputView {
 
       IOUtils.output(`- ${product.name} ${product.price}원 ${product.quantity}개 ${promotionName}`);
     });
+    IOUtils.newLine();
   }
 }
 
