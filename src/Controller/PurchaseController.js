@@ -9,8 +9,8 @@ class PurchaseController {
   }
 
   async run() {
-    const purchaseItems = await this.#inputView.inputPurchaseItems();
-    Validator.checkPurchaseInput(purchaseItems);
+    const purchaseInput = await this.#inputView.inputPurchaseItems();
+    Validator.checkPurchaseInput(purchaseInput);
   }
 }
 

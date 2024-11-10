@@ -1,9 +1,9 @@
-import getCurrentDate from "../Utils/getCurrentDate";
+import getCurrentDate from '../Utils/getCurrentDate';
 
 class ProductPurchase {
-  constructor(products, purchaseItems) {
+  constructor(products, purchaseInput) {
     this.products = products;
-    this.purchaseItems = purchaseItems;
+    this.purchaseInput = purchaseInput;
   }
 
   #getPurchaseProductNameAndQuantity(purchaseInput) {
@@ -20,7 +20,7 @@ class ProductPurchase {
   }
 
   #findProductByName() {
-    const purchaseItems = this.#getPurchaseProductNameAndQuantity(this.purchaseItems);
+    const purchaseItems = this.#getPurchaseProductNameAndQuantity(this.purchaseInput);
 
     return purchaseItems.map((purchaseItem) => {
       const product = this.products.find((product) => product.name === purchaseItem.name);
@@ -54,7 +54,6 @@ class ProductPurchase {
 
     return { buy, get };
   }
-
 }
 
 export default ProductPurchase;
