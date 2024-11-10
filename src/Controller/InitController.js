@@ -1,35 +1,18 @@
-import { fileURLToPath } from 'url';
-import path from 'path';
+import ProductStorage from '../Model/ProductStorage.js';
 import OutputView from '../View/OutputView.js';
-import DataParser from '../Utils/DataParser.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 class InitController {
   #outputView;
-  #dataParser;
+  #productStorage;
 
   constructor() {
     this.#outputView = new OutputView();
-    this.#dataParser = new DataParser();
-  }
-
-  #getCurrentProducts() {
-    const productsFilePath = path.join(__dirname, '../../public/products.md');
-    const promotionsFilePath = path.join(__dirname, '../../public/promotions.md');
-
-    const currentProducts = this.#dataParser.parseProductsAndPromotions(
-      productsFilePath,
-      promotionsFilePath,
-    );
-
-    return currentProducts;
+    this.#productStorage = new ProductStorage();
   }
 
   async run() {
     this.#outputView.printIntro();
-    const currentProducts = this.#getCurrentProducts();
+    const currentProducts = this.#productStorage.loadProducts();
     this.#outputView.printCurrentProducts(currentProducts);
   }
 }
