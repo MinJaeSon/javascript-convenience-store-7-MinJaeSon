@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 class ProductStorage {
-  products;
+  #products;
   #dataParser;
 
   constructor() {
@@ -27,9 +27,9 @@ class ProductStorage {
   }
 
   loadProducts() {
-    this.products = this.#getCurrentProducts();
+    this.#products = this.#getCurrentProducts();
 
-    return this.products;
+    return this.#products;
   }
 }
 
