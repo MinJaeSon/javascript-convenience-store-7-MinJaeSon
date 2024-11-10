@@ -41,6 +41,20 @@ class ProductPurchase {
 
     return currentDate >= startDate && currentDate <= endDate;
   }
+
+  #getPromotionInfo() {
+    if (!this.#checkIsPromotionTerm()) {
+      return;
+    }
+
+    const product = this.#findProductByName();
+    const promotion = product[0].promotion;
+    const buy = promotion.buy;
+    const get = promotion.get;
+
+    return { buy, get };
+  }
+
 }
 
 export default ProductPurchase;
