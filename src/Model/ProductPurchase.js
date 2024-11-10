@@ -1,12 +1,11 @@
 import getCurrentDate from '../Utils/getCurrentDate';
 
 class ProductPurchase {
-  constructor(products, purchaseInput) {
+  constructor(products) {
     this.products = products;
-    this.purchaseInput = purchaseInput;
   }
 
-  #getPurchaseProductNameAndQuantity(purchaseInput) {
+  getPurchaseProductsNameAndQuantity(purchaseInput) {
     const itemRegex = /^\[([\w가-힣]+)-(\d+)\]$/;
     const items = purchaseInput.trim().split(',');
 
@@ -16,55 +15,37 @@ class ProductPurchase {
       return { name: match[1], quantity: Number(match[2]) };
     });
 
-    return purchaseOrder;
+    return purchaseOrder; // [{name: '상품명', quantity: 상품수량}, ...]
   }
 
-  #findProductByName() {
-    const purchaseOrder = this.#getPurchaseProductNameAndQuantity(this.purchaseInput);
+  findProductByName(name) {
+    const orderedProduct = this.products.filter((product) => product.name === name);
 
-    return purchaseOrder.map((purchaseItem) => {
-      const product = this.products.find((product) => product.name === purchaseItem.name);
-
-      return product; // [{프로모션 상품 객체}, {일반 상품 객체}]
-    });
+    return orderedProduct; // [{프로모션 상품 객체}, {일반 상품 객체}]
   }
 
-  #checkIsPromotionTerm() {
-    const currentDate = getCurrentDate();
-    const product = this.#findProductByName();
-    const startDate = Number(product[0].promotion?.start_date.replace(/-/g, ''));
-    const endDate = Number(product[0].promotion?.end_date.replace(/-/g, ''));
+  checkIsPromotionTerm(orderedProducts) {
+    const startDate = Number(orderedProducts[0].promotion?.start_date.replace(/-/g, ''));
+    const endDate = Number(orderedProducts[0].promotion?.end_date.replace(/-/g, ''));
 
-    if (!product[0].promotion) {
+    if (!orderedProducts[0].promotion) {
       return;
     }
 
     return currentDate >= startDate && currentDate <= endDate;
   }
 
-  #getPromotionInfo() {
-    if (!this.#checkIsPromotionTerm()) {
+  getPromotionInfo(orderdProduct, isPromotionTerm) {
+    if (!isPromotionTerm) {
       return;
     }
 
-    const product = this.#findProductByName();
-    const promotion = product[0].promotion;
+    const promotion = orderdProduct[0].promotion;
     const buy = promotion.buy;
     const get = promotion.get;
 
     return { buy, get };
   }
-
-  #checkHasPromotionStock() {
-    const promotionProduct = this.#findProductByName()[0];
-    const purchaseOrder = this.#getPurchaseProductNameAndQuantity(this.purchaseInput);
-
-    return purchaseOrder.every(
-      (purchaseItem, index) => promotionProduct[index].quantity >= purchaseItem.quantity,
-    );
-  }
-
-  #handle
 }
 
 export default ProductPurchase;
