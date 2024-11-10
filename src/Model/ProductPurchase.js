@@ -10,19 +10,19 @@ class ProductPurchase {
     const itemRegex = /^\[([\w가-힣]+)-(\d+)\]$/;
     const items = purchaseInput.trim().split(',');
 
-    const purchaseItems = items.map((item) => {
+    const purchaseOrder = items.map((item) => {
       const match = item.trim().match(itemRegex);
 
       return { name: match[1], quantity: Number(match[2]) };
     });
 
-    return purchaseItems;
+    return purchaseOrder;
   }
 
   #findProductByName() {
-    const purchaseItems = this.#getPurchaseProductNameAndQuantity(this.purchaseInput);
+    const purchaseOrder = this.#getPurchaseProductNameAndQuantity(this.purchaseInput);
 
-    return purchaseItems.map((purchaseItem) => {
+    return purchaseOrder.map((purchaseItem) => {
       const product = this.products.find((product) => product.name === purchaseItem.name);
 
       return product; // [{프로모션 상품 객체}, {일반 상품 객체}]
@@ -57,12 +57,14 @@ class ProductPurchase {
 
   #checkHasPromotionStock() {
     const promotionProduct = this.#findProductByName()[0];
-    const purchaseItems = this.#getPurchaseProductNameAndQuantity(this.purchaseInput);
+    const purchaseOrder = this.#getPurchaseProductNameAndQuantity(this.purchaseInput);
 
-    return purchaseItems.every(
+    return purchaseOrder.every(
       (purchaseItem, index) => promotionProduct[index].quantity >= purchaseItem.quantity,
     );
   }
+
+  #handle
 }
 
 export default ProductPurchase;
