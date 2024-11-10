@@ -16,6 +16,16 @@ class ProductPurchase {
 
     return purchaseItems;
   }
+
+  #findProductByName() {
+    const purchaseItems = this.#getPurchaseProductNameAndQuantity(this.purchaseItems);
+
+    return purchaseItems.map((purchaseItem) => {
+      const product = this.products.find((product) => product.name === purchaseItem.name);
+
+      return product; // [{프로모션 상품 객체}, {일반 상품 객체}]
+    });
+  }
 }
 
 export default ProductPurchase;
