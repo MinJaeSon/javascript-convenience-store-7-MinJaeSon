@@ -54,6 +54,15 @@ class ProductPurchase {
 
     return { buy, get };
   }
+
+  #checkHasPromotionStock() {
+    const promotionProduct = this.#findProductByName()[0];
+    const purchaseItems = this.#getPurchaseProductNameAndQuantity(this.purchaseInput);
+
+    return purchaseItems.every(
+      (purchaseItem, index) => promotionProduct[index].quantity >= purchaseItem.quantity,
+    );
+  }
 }
 
 export default ProductPurchase;
