@@ -1,10 +1,13 @@
 import getCurrentDate from '../Utils/getCurrentDate';
+import ProductStorage from './ProductStorage';
 
 class ProductPurchase {
   products = [];
+  #productStorage;
 
   constructor(products) {
     this.products = products;
+    this.#productStorage = new ProductStorage();
   }
 
   getPurchaseProductsNameAndQuantity(purchaseInput) {
@@ -49,6 +52,18 @@ class ProductPurchase {
 
     return { buy, get };
   }
+
+  checkPromotionStockAvailability(orderdProduct, get, buy) {
+    const promotionQuantity = orderdProduct[0].quantity;
+    const group = get + buy;
+
+    const canPurchaseWithPromotionStock = promotionQuantity % group === 0;
+    const availablePromotionStock = Math.floor(promotionQuantity / group) * group;
+    const generalPurchaseQuantity = promotionQuantity - availablePromotionStock;
+
+    return { canPurchaseWithPromotionStock, availablePromotionStock, generalPurchaseQuantity };
+  }
+
 }
 
 export default ProductPurchase;
