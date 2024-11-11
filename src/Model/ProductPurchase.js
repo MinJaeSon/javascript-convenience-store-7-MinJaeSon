@@ -1,6 +1,8 @@
 import getCurrentDate from '../Utils/getCurrentDate';
 
 class ProductPurchase {
+  products = [];
+
   constructor(products) {
     this.products = products;
   }
