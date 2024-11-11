@@ -60,10 +60,29 @@ class ProductPurchase {
 
     const canPurchasePromotionStock =
       promotionQuantity >= orderedQuantity || promotionQuantity % group === 0;
-    const availablePromotionStock = Math.floor(promotionQuantity / group) * group;
-    const generalPurchaseQuantity = promotionQuantity - availablePromotionStock;
 
-    return { canPurchasePromotionStock, availablePromotionStock, generalPurchaseQuantity };
+    return canPurchasePromotionStock;
+  }
+
+  #getReducePromotionQuantity(orderedQuantity, promotionQuantity, group) {
+    if (orderedQuantity < group) {
+      return orderedQuantity;
+    }
+    if (promotionQuantity % group === 0) {
+      return Math.floor(promotionQuantity % group) * group;
+    }
+    return Math.floor(orderedQuantity / group) * group;
+  }
+
+  getGeneralPurchaseQuantity(orderdProduct, order, get, buy) {
+    const promotionQuantity = orderdProduct[0].quantity;
+    const group = get + buy;
+    const orderedQuantity = order.quantity;
+
+    const reducePromotionQuantity = this.#getReducePromotionQuantity(orderedQuantity, promotionQuantity, group);
+    const reduceGeneralQuantity = orderedQuantity - reducePromotionQuantity;
+
+    return reduceGeneralQuantity;
   }
 
   checkGetPromotionBenefit(orderedProduct, order, buy, get) {
@@ -73,23 +92,9 @@ class ProductPurchase {
 
     const canAddProduct =
       orderedQuantity % group === buy && orderedQuantity + get <= promotionQuantity;
-    const addQuantity = get;
+    const presentQuantity = get;
 
-    return { canAddProduct, addQuantity };
-  }
-
-  handlePurchasePromotion() {
-    // 프로모션 재고가 availablePromotionStock만큼 감소
-  }
-
-  handlePurchaseBoth(willPurchaseGeneral, availablePromotionStock, generalPurchaseQuantity) {
-    if (willPurchaseGeneral) {
-      // generalPurchaseQuantity만큼은 구입하지 않음
-      // 프로모션 재고만 availablePromotionStock만큼 감소
-    } else {
-      // generalPurchaseQuantity만큼은 일반 가격으로 구입
-      // 프로모션 재고는 availablePromotionStock만큼 감소, 일반 재고는 generalPurchaseQuantity만큼 감소
-    }
+    return { canAddProduct, presentQuantity };
   }
 }
 
