@@ -27,6 +27,7 @@ class ProductPurchase {
   }
 
   checkIsPromotionTerm(orderedProducts) {
+    const currentDate = getCurrentDate();
     const startDate = Number(orderedProducts[0].promotion?.start_date.replace(/-/g, ''));
     const endDate = Number(orderedProducts[0].promotion?.end_date.replace(/-/g, ''));
 
