@@ -27,7 +27,7 @@ class PurchaseController {
       const { get, buy } = this.#productPurchase.getPromotionInfo(orderdProduct, isPromotionTerm);
 
       const { canPurchasePromotionStock, availablePromotionStock, generalPurchaseQuantity } =
-        this.#productPurchase.checkPromotionStockAvailability(orderdProduct, get, buy);
+        this.#productPurchase.checkPromotionStockAvailability(orderdProduct, order, get, buy);
 
       if (canPurchasePromotionStock) {
         this.#productPurchase.handlePurchasePromotion();

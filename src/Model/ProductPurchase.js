@@ -53,16 +53,37 @@ class ProductPurchase {
     return { buy, get };
   }
 
-  checkPromotionStockAvailability(orderdProduct, get, buy) {
+  checkPromotionStockAvailability(orderdProduct, order, get, buy) {
     const promotionQuantity = orderdProduct[0].quantity;
     const group = get + buy;
 
-    const canPurchasePromotionStock = promotionQuantity % group === 0;
+    const canPurchasePromotionStock = promotionQuantity >= order.quantity || promotionQuantity % group === 0;
     const availablePromotionStock = Math.floor(promotionQuantity / group) * group;
     const generalPurchaseQuantity = promotionQuantity - availablePromotionStock;
-
+    
     return { canPurchasePromotionStock, availablePromotionStock, generalPurchaseQuantity };
   }
+  
+  handlePurchasePromotion() {
+    // 프로모션 재고가 availablePromotionStock만큼 감소
+  }
+
+  handlePurchaseBoth(willPurchaseGeneral, availablePromotionStock, generalPurchaseQuantity) {
+    if (willPurchaseGeneral) {
+      // generalPurchaseQuantity만큼은 구입하지 않음
+      // 프로모션 재고만 availablePromotionStock만큼 감소
+    } else {
+      // generalPurchaseQuantity만큼은 일반 가격으로 구입
+      // 프로모션 재고는 availablePromotionStock만큼 감소, 일반 재고는 generalPurchaseQuantity만큼 감소
+    }
+  }
+
+  checkGetPromotionBenefit() {
+    // 프로모션 적용이 가능한 상품에 대해 고객이 해당 수량만큼 가져왔는지 확인
+
+    return addQuantity; // Yes 했을 때 무료로 받을 상품 수량
+  }
+
 }
 
 export default ProductPurchase;
