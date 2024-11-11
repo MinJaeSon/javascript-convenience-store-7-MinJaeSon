@@ -1,3 +1,4 @@
+import Membership from '../Model/MemberShip.js';
 import ProductPurchase from '../Model/ProductPurchase.js';
 import ProductStorage from '../Model/ProductStorage.js';
 import Validator from '../Validation/Validator.js';
@@ -10,6 +11,7 @@ class PurchaseController {
   #productStorage;
   #productPurchase;
   #currentProducts;
+  #membership;
 
   constructor() {
     this.#inputView = new InputView();
@@ -17,11 +19,10 @@ class PurchaseController {
     this.#productStorage = new ProductStorage();
     this.#currentProducts = this.#productStorage.loadStorage();
     this.#productPurchase = new ProductPurchase(this.#currentProducts);
+    this.#membership = new Membership();
   }
 
   async run() {
-    let updatedProducts;
-
     const purchaseInput = await this.#inputView.inputPurchaseItems();
     Validator.checkPurchaseInput(purchaseInput);
 
@@ -80,7 +81,10 @@ class PurchaseController {
       updatedProducts = this.#productStorage.updateStorage(order.name, order.quantity);
     });
 
-    this.#outputView.printCurrentProducts(updatedProducts);
+    const willApplyMembership = await this.#checkMembershipConfirmation();
+    if (willApplyMembership) {
+      const membershipDiscountAmount = this.#membership.getMembershipDiscountAmount(purchaseOrder);
+    }
   }
 
   async #checkGeneralPurchaseConfirmation(order, generalPurchaseQuantity, get, buy, purchaseOrder) {
@@ -105,6 +109,13 @@ class PurchaseController {
     Validator.checkYesOrNoInput(willGetPresent);
 
     return willGetPresent;
+  }
+
+  async #checkMembershipConfirmation(order, presentQuantity) {
+    const willApplyMembership = await this.#inputView.inputMembershipApply();
+    Validator.checkYesOrNoInput(willApplyMembership);
+
+    return willApplyMembership;
   }
 }
 
