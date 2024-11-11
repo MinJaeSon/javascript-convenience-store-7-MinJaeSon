@@ -32,15 +32,18 @@ class PurchaseController {
       if (canPurchasePromotionStock) {
         this.#productPurchase.handlePurchasePromotion();
       } else {
-        const willPurchaseGeneral = this.#inputView.inputNoPromotionWarning(
-          order.name,
-          generalPurchaseQuantity,
-        );
-        Validator.checkYesOrNoInput(willPurchaseGeneral);
-
+        this.#handleGeneralPurchaseConfirmation(order, generalPurchaseQuantity);
         this.#productPurchase.handlePurchaseBoth();
       }
     });
+  }
+
+  async #handleGeneralPurchaseConfirmation(order, generalPurchaseQuantity) {
+    const willPurchaseGeneral = await this.#inputView.inputNoPromotionWarning(
+      order.name,
+      generalPurchaseQuantity,
+    );
+    Validator.checkYesOrNoInput(willPurchaseGeneral);
   }
 }
 
