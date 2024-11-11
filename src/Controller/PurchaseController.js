@@ -29,14 +29,20 @@ class PurchaseController {
       );
       const { get, buy } = this.#productPurchase.getPromotionInfo(orderdProduct);
 
-      const { canPurchaseWithPromotionStock, availablePromotionStock, generalPurchaseQuantity } =
+      const { canPurchasePromotionStock, availablePromotionStock, generalPurchaseQuantity } =
         this.#productPurchase.checkPromotionStockAvailability(orderdProduct, get, buy);
-        if (!canPurchaseWithPromotionStock) {
-          const isPurchaseWithGeneral = this.#inputView.inputNoPromotionWarning(order.name, generalPurchaseQuantity);
-          Validator.checkYesOrNoInput(isPurchaseWithGeneral);
+        
+      if (canPurchasePromotionStock) {
+        this.#productPurchase.handlePurchasePromotion();
+      } else {
+        const willPurchaseGeneral = this.#inputView.inputNoPromotionWarning(
+          order.name,
+          generalPurchaseQuantity,
+        );
+        Validator.checkYesOrNoInput(willPurchaseGeneral);
 
-          
-        }
+        this.#productPurchase.handlePurchaseBoth();
+      }
     });
   }
 }
