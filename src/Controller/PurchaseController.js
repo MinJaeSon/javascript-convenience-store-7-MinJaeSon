@@ -35,6 +35,17 @@ class PurchaseController {
         this.#handleGeneralPurchaseConfirmation(order, generalPurchaseQuantity);
         this.#productPurchase.handlePurchaseBoth();
       }
+
+      const { canAddProduct, addQuantity } = this.#productPurchase.checkGetPromotionBenefit(
+        orderdProduct,
+        order,
+        buy,
+        get,
+      );
+
+      if (canAddProduct) {
+        this.#handlePromotionBenefitConfirmation();
+      }
     });
   }
 
@@ -44,6 +55,11 @@ class PurchaseController {
       generalPurchaseQuantity,
     );
     Validator.checkYesOrNoInput(willPurchaseGeneral);
+  }
+
+  async #handlePromotionBenefitConfirmation() {
+    const willAddProduct = await this.#inputView.inputNotifyPromotionBenefit();
+    Validator.checkYesOrNoInput(willAddProduct);
   }
 }
 
