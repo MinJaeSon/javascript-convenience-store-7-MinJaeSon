@@ -12,7 +12,7 @@ class InitController {
 
   async run() {
     this.#outputView.printIntro();
-    const currentProducts = this.#productStorage.loadProducts();
+    const currentProducts = this.#productStorage.loadStorage();
     this.#outputView.printCurrentProducts(currentProducts);
   }
 }
