@@ -13,6 +13,15 @@ class Validator {
       throw new Error(this.ERROR_MESSAGE.INVALID_FORMAT);
     }
   }
+
+  static checkYesOrNoInput(input) {
+    const input = input.trim().toUpperCase();
+    const isValid = input === 'Y' || input === 'N';
+
+    if (!isValid) {
+      throw new Error(this.ERROR_MESSAGE.INVALID_FORMAT);
+    }
+  }
 }
 
 export default Validator;

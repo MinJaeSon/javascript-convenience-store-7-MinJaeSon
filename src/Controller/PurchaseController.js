@@ -33,6 +33,8 @@ class PurchaseController {
         this.#productPurchase.checkPromotionStockAvailability(orderdProduct, get, buy);
         if (!canPurchaseWithPromotionStock) {
           const isPurchaseWithGeneral = this.#inputView.inputNoPromotionWarning(order.name, generalPurchaseQuantity);
+          Validator.checkYesOrNoInput(isPurchaseWithGeneral);
+
           
         }
     });
