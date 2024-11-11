@@ -17,17 +17,17 @@ class InputView {
   }
 
   async inputNoPromotionWarning(name, quantity) {
-    const isPurchase = await IOUtils.input(this.#inputMsg.NO_PROMOTION_WARNING(name, quantity));
+    const willPurchaseGeneral = await IOUtils.input(this.#inputMsg.NO_PROMOTION_WARNING(name, quantity));
     IOUtils.newLine();
 
-    return isPurchase;
+    return willPurchaseGeneral;
   }
 
   async inputNotifyPromotionBenefit(name, quantity) {
-    const isAdd = await IOUtils.input(this.#inputMsg.NOTIFY_PROMOTION_BENEFIT(name, quantity));
+    const willGetPresent = await IOUtils.input(this.#inputMsg.NOTIFY_PROMOTION_BENEFIT(name, quantity));
     IOUtils.newLine();
 
-    return isAdd;
+    return willGetPresent;
   }
 }
 
