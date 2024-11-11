@@ -1,5 +1,5 @@
-import getCurrentDate from '../Utils/getCurrentDate';
-import ProductStorage from './ProductStorage';
+import getCurrentDate from '../Utils/getCurrentDate.js';
+import ProductStorage from './ProductStorage.js';
 
 class ProductPurchase {
   products = [];
@@ -57,13 +57,12 @@ class ProductPurchase {
     const promotionQuantity = orderdProduct[0].quantity;
     const group = get + buy;
 
-    const canPurchaseWithPromotionStock = promotionQuantity % group === 0;
+    const canPurchasePromotionStock = promotionQuantity % group === 0;
     const availablePromotionStock = Math.floor(promotionQuantity / group) * group;
     const generalPurchaseQuantity = promotionQuantity - availablePromotionStock;
 
-    return { canPurchaseWithPromotionStock, availablePromotionStock, generalPurchaseQuantity };
+    return { canPurchasePromotionStock, availablePromotionStock, generalPurchaseQuantity };
   }
-
 }
 
 export default ProductPurchase;

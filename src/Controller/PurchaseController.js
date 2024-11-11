@@ -23,15 +23,12 @@ class PurchaseController {
     const purchaseOrder = this.#productPurchase.getPurchaseProductsNameAndQuantity(purchaseInput);
     purchaseOrder.forEach((order) => {
       const orderdProduct = this.#productPurchase.findProductByName(order.name);
-      const isPromotionTerm = this.#productPurchase.checkIsPromotionTerm(
-        orderdProduct,
-        isPromotionTerm,
-      );
-      const { get, buy } = this.#productPurchase.getPromotionInfo(orderdProduct);
+      const isPromotionTerm = this.#productPurchase.checkIsPromotionTerm(orderdProduct);
+      const { get, buy } = this.#productPurchase.getPromotionInfo(orderdProduct, isPromotionTerm);
 
       const { canPurchasePromotionStock, availablePromotionStock, generalPurchaseQuantity } =
         this.#productPurchase.checkPromotionStockAvailability(orderdProduct, get, buy);
-        
+
       if (canPurchasePromotionStock) {
         this.#productPurchase.handlePurchasePromotion();
       } else {
