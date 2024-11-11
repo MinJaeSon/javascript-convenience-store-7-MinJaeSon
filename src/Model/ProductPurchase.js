@@ -42,24 +42,29 @@ class ProductPurchase {
   }
 
   getPromotionInfo(orderdProduct, isPromotionTerm) {
-    if (!isPromotionTerm) {
-      return;
+    const promotion = orderdProduct[0]?.promotion;
+
+    if (!isPromotionTerm || !promotion) {
+      return {};
     }
 
-    const promotion = orderdProduct[0].promotion;
-    const buy = promotion.buy;
-    const get = promotion.get;
-
-    return { buy, get };
+    return {
+      buy: promotion.buy,
+      get: promotion.get,
+    };
   }
 
   checkPromotionStockAvailability(orderdProduct, order, get, buy) {
+    if (get === 0 && buy === 0) {
+      return false;
+    }
+
     const promotionQuantity = orderdProduct[0].quantity;
     const group = get + buy;
     const orderedQuantity = order.quantity;
 
     const canPurchasePromotionStock =
-      promotionQuantity >= orderedQuantity || promotionQuantity % group === 0;
+      promotionQuantity >= orderedQuantity && promotionQuantity % group === 0;
 
     return canPurchasePromotionStock;
   }
@@ -79,7 +84,11 @@ class ProductPurchase {
     const group = get + buy;
     const orderedQuantity = order.quantity;
 
-    const reducePromotionQuantity = this.#getReducePromotionQuantity(orderedQuantity, promotionQuantity, group);
+    const reducePromotionQuantity = this.#getReducePromotionQuantity(
+      orderedQuantity,
+      promotionQuantity,
+      group,
+    );
     const reduceGeneralQuantity = orderedQuantity - reducePromotionQuantity;
 
     return reduceGeneralQuantity;
@@ -95,6 +104,23 @@ class ProductPurchase {
     const presentQuantity = get;
 
     return { canAddProduct, presentQuantity };
+  }
+
+  handlePurchase(
+    willPurchaseGeneral,
+    productName,
+    availablePromotionStock,
+    generalPurchaseQuantity,
+  ) {
+    if (willPurchaseGeneral) {
+      console.log('handlePurchaseBoth + willPurchaseGeneral');
+      // generalPurchaseQuantity만큼은 구입하지 않음
+      // 프로모션 재고만 availablePromotionStock만큼 감소
+    } else {
+      console.log('handlePurchaseBoth + !willPurchaseGeneral');
+      // generalPurchaseQuantity만큼은 일반 가격으로 구입
+      // 프로모션 재고는 availablePromotionStock만큼 감소, 일반 재고는 generalPurchaseQuantity만큼 감소
+    }
   }
 }
 

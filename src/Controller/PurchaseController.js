@@ -30,7 +30,10 @@ class PurchaseController {
     purchaseOrder.forEach((order) => {
       const orderdProduct = this.#productPurchase.findProductByName(order.name);
       const isPromotionTerm = this.#productPurchase.checkIsPromotionTerm(orderdProduct);
-      const { get, buy } = this.#productPurchase.getPromotionInfo(orderdProduct, isPromotionTerm);
+      const { get = 0, buy = 0 } = this.#productPurchase.getPromotionInfo(
+        orderdProduct,
+        isPromotionTerm,
+      ) || {};
 
       const canPurchaseOnlyWithPromotion = this.#productPurchase.checkPromotionStockAvailability(
         orderdProduct,
@@ -40,16 +43,25 @@ class PurchaseController {
       );
 
       if (!canPurchaseOnlyWithPromotion) {
-        const willPurchaseGeneral = this.#checkGeneralPurchaseConfirmation(order, generalPurchaseQuantity);
+        const generalPurchaseQuantity = this.#productPurchase.getGeneralPurchaseQuantity(
+          orderdProduct,
+          order,
+          get,
+          buy,
+        );
+
+        const willPurchaseGeneral = this.#checkGeneralPurchaseConfirmation(
+          order,
+          generalPurchaseQuantity,
+          get,
+          buy,
+        );
+
         if (willPurchaseGeneral) {
-          const generalPurchaseQuantity = this.#productPurchase.getGeneralPurchaseQuantity(
-            orderdProduct,
-            order,
-            get,
-            buy,
-          );
           // generalPurchaseQuantity만큼은 정가로 구입
         }
+      } else {
+        // order.quantity를 모두 정가로 구입
       }
 
       const { canAddProduct, presentQuantity } = this.#productPurchase.checkGetPromotionBenefit(
@@ -72,7 +84,11 @@ class PurchaseController {
     this.#outputView.printCurrentProducts(updatedProducts);
   }
 
-  async #checkGeneralPurchaseConfirmation(order, generalPurchaseQuantity) {
+  async #checkGeneralPurchaseConfirmation(order, generalPurchaseQuantity, get, buy) {
+    if (get === 0 && buy === 0) {
+      return true;
+    }
+
     const willPurchaseGeneral = await this.#inputView.inputNoPromotionWarning(
       order.name,
       generalPurchaseQuantity,
