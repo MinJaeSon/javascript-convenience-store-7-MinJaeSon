@@ -12,7 +12,7 @@ class PurchaseController {
   constructor() {
     this.#inputView = new InputView();
     this.#productStorage = new ProductStorage();
-    this.#currentProducts = this.#productStorage.loadProducts();
+    this.#currentProducts = this.#productStorage.loadStorage();
     this.#productPurchase = new ProductPurchase(this.#currentProducts);
   }
 
@@ -31,6 +31,10 @@ class PurchaseController {
 
       const { canPurchaseWithPromotionStock, availablePromotionStock, generalPurchaseQuantity } =
         this.#productPurchase.checkPromotionStockAvailability(orderdProduct, get, buy);
+        if (!canPurchaseWithPromotionStock) {
+          const isPurchaseWithGeneral = this.#inputView.inputNoPromotionWarning(order.name, generalPurchaseQuantity);
+          
+        }
     });
   }
 }

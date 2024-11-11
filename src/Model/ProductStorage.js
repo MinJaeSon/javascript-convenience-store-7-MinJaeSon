@@ -10,7 +10,7 @@ class ProductStorage {
   #dataParser;
 
   constructor() {
-    this.products = [];
+    this.#products = [];
     this.#dataParser = new DataParser();
   }
 
@@ -26,7 +26,7 @@ class ProductStorage {
     return currentProducts;
   }
 
-  loadProducts() {
+  loadStorage() {
     this.#products = this.#getCurrentProducts();
 
     return this.#products;
