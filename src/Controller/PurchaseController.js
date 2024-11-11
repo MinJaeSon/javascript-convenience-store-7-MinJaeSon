@@ -30,10 +30,8 @@ class PurchaseController {
     purchaseOrder.forEach((order) => {
       const orderdProduct = this.#productPurchase.findProductByName(order.name);
       const isPromotionTerm = this.#productPurchase.checkIsPromotionTerm(orderdProduct);
-      const { get = 0, buy = 0 } = this.#productPurchase.getPromotionInfo(
-        orderdProduct,
-        isPromotionTerm,
-      ) || {};
+      const { get = 0, buy = 0 } =
+        this.#productPurchase.getPromotionInfo(orderdProduct, isPromotionTerm) || {};
 
       const canPurchaseOnlyWithPromotion = this.#productPurchase.checkPromotionStockAvailability(
         orderdProduct,
@@ -55,6 +53,7 @@ class PurchaseController {
           generalPurchaseQuantity,
           get,
           buy,
+          purchaseOrder,
         );
 
         if (willPurchaseGeneral) {
@@ -72,7 +71,7 @@ class PurchaseController {
       );
 
       if (canAddProduct) {
-        const willGetPresent = this.#checkPromotionBenefitConfirmation(presentQuantity);
+        const willGetPresent = this.#checkPromotionBenefitConfirmation(order, presentQuantity);
         if (willGetPresent) {
           // presentQuantity만큼은 증정
         }
@@ -84,8 +83,8 @@ class PurchaseController {
     this.#outputView.printCurrentProducts(updatedProducts);
   }
 
-  async #checkGeneralPurchaseConfirmation(order, generalPurchaseQuantity, get, buy) {
-    if (get === 0 && buy === 0) {
+  async #checkGeneralPurchaseConfirmation(order, generalPurchaseQuantity, get, buy, purchaseOrder) {
+    if ((get === 0 && buy === 0) || purchaseOrder.length === 1) {
       return true;
     }
 
@@ -98,7 +97,7 @@ class PurchaseController {
     return willPurchaseGeneral;
   }
 
-  async #checkPromotionBenefitConfirmation(presentQuantity) {
+  async #checkPromotionBenefitConfirmation(order, presentQuantity) {
     const willGetPresent = await this.#inputView.inputNotifyPromotionBenefit(
       order.name,
       presentQuantity,
