@@ -10,7 +10,7 @@
 
 ### Promotion
 
-프로모션 정보를 담은 객체 
+프로모션 정보를 담은 객체
 
 ### ProductStorage
 
@@ -26,11 +26,11 @@
 
 ### PromotionDiscount
 
-프로모션 할인을 처리하는 객체
+프로모션 할인을 처리하는 객체 (Discount를 상속)
 
 ### MembershipDiscount
 
-멤버십 할인을 처리하는 객체
+멤버십 할인을 처리하는 객체 (Discount를 상속)
 
 ### ProductPurchase
 
@@ -98,3 +98,4 @@ Model과 View를 연결하여, 입력을 받아 Model에서 처리하고 결과�
 - [ ] 각 상품에 대한 Product 객체를 생성할 수 있도록 주어진 `products.md`와 `promotions.md`를 파싱하여 필요한 값들을 반환하는 함수
 - [ ] 입출력을 모듈화하기 위한 함수
 - [ ] 프로모션 기간 확인을 위해 현재 날짜를 형식에 맞게 반환하는 함수
+- [ ] 숫자를 가격 단위에 맞게 포맷팅해주는 함수
